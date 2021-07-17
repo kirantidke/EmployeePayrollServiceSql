@@ -1,0 +1,162 @@
+		Employee Payroll problem
+
+UC-1-Ability to create a payroll service database
+sol:-create database EmployeePayrollService;
+	->show databases;
+	->use EmployeePayrollService;
+
+UC-2-Ability to create a employee payroll table in the payroll service database to manage employee payrolls.
+sol:-create table EmployeePayroll(EmployeeId int not null auto_increment,EmployeeName varchar(255),salary int,startDate date,primary key(EmployeeId));
+
+UC-3-Ability to create employee payroll data in the payroll service database as part of CRUD Operation - Use payroll_service database in MSSQL Client
+	- Use INSERT INTO employee_payroll
+	Query to create employees payroll
+	data into the employee_payroll table
+
+sol:-	insert into EmployeePayroll values(101,"kiran",40000,'2021-09-05');
+	insert into EmployeePayroll values(102,"Akshay",50000,'2021-08-18');
+	insert into EmployeePayroll values(103,"Akash",60000,'2021-12-05');
+	insert into EmployeePayroll values(104,"Aniket",45000,'2021-9-05');
+	insert into EmployeePayroll values(105,"Divya",90000,'2021-5-05');
+
+UC-4-Ability to retrieve all the employee payroll data that is added to payroll service database
+	- Use payroll_service database in MSSQL Client
+	- Use SELECT * FROM employee_payroll to
+	retrieve all the data from the
+	employee_payroll table
+
+sol-select * from EmployeePayroll;
+o/p-
++------------+--------------+--------+------------+
+| EmployeeId | EmployeeName | salary | startDate  |
++------------+--------------+--------+------------+
+|        101 | kiran        |  40000 | 2021-09-05 |
+|        102 | Akshay       |  50000 | 2021-08-18 |
+|        103 | Akash        |  60000 | 2021-12-05 |
+|        104 | Aniket       |  45000 | 2021-09-05 |
+|        105 | Divya        |  90000 | 2021-05-05 |
++------------+--------------+--------+------------+
+
+UC-5-Ability to retrieve salary data for a particular employee as well as all employees who have joined in a particular data range from the payroll service database
+	- Use SELECT salary FROM employee_payroll WHERE name = 'Bill’ Query to View Bill’s salary
+	- Use Select query with Where condition View employees between start dates
+	- Query: WHERE start BETWEEN CAST('2018-01-01'AS DATE) AND DATE(NOW());
+	- Note: Where Condition Clause is used to retrieve the row needed from the table
+	- Note: Use of Database Functions like CAST() and NOW()
+
+sol- select salary from EmployeePayroll where EmployeeName = "Akash";
+o/p
++--------+
+| salary |
++--------+
+|  60000 |
++--------+
+	select EmployeeName from EmployeePayroll where startDate between '2021-08-05' and '2021-09-05';
++--------------+
+| EmployeeName |
++--------------+
+| kiran        |
+| Akshay       |
+| Aniket       |
++--------------+
+
+	select * from EmployeePayroll where startDate between cast('2020-05-05' as date) and date(now());
+o/p
++------------+--------------+--------+------------+
+| EmployeeId | EmployeeName | salary | startDate  |
++------------+--------------+--------+------------+
+|        105 | Divya        |  90000 | 2021-05-05 |
++------------+--------------+--------+------------+
+
+UC-6-	Ability to add Gender to Employee Payroll Table and Update the Rows to reflect the correct Employee Gender
+	- Use payroll_service database in MSSQL Client
+	- Use Alter Table Command to add Field gender after the name field
+	- Use Update Query to set the gender using where condition with the employee name
+	- E.g. UPDATE employee_payroll set gender ='M' where name
+
+sol:- alter table EmployeePayroll add gender varchar(255);
+	select * from EmployeePayroll;
++------------+--------------+--------+------------+--------+
+| EmployeeId | EmployeeName | salary | startDate  | gender |
++------------+--------------+--------+------------+--------+
+|        101 | kiran        |  40000 | 2021-09-05 | NULL   |
+|        102 | Akshay       |  50000 | 2021-08-18 | NULL   |
+|        103 | Akash        |  60000 | 2021-12-05 | NULL   |
+|        104 | Aniket       |  45000 | 2021-09-05 | NULL   |
+|        105 | Divya        |  90000 | 2021-05-05 | NULL   |
++------------+--------------+--------+------------+--------+
+	 
+o/p:-	update EmployeePayroll set gender="M" where EmployeeName="Akshay" or EmployeeName="Akash" or EmployeeName="Aniket";
+	update EmployeePayroll set gender="F" where EmployeeName="Divya" or EmployeeName="kiran";
+
+	select * from EmployeePayroll;
++------------+--------------+--------+------------+--------+
+| EmployeeId | EmployeeName | salary | startDate  | gender |
++------------+--------------+--------+------------+--------+
+|        101 | kiran        |  40000 | 2021-09-05 | F      |
+|        102 | Akshay       |  50000 | 2021-08-18 | M      |
+|        103 | Akash        |  60000 | 2021-12-05 | M      |
+|        104 | Aniket       |  45000 | 2021-09-05 | M      |
+|        105 | Divya        |  90000 | 2021-05-05 | F      |
++------------+--------------+--------+------------+--------+
+
+UC-7-Ability to find sum, average, min, max and number of male and female employees
+	- Use payroll_service database in MSSQL Client
+	- Use Database Function SUM, AVG, MIN, MAX, COUNT to do analysis by Male or Female.
+	- Note: You will need to use GROUP BY GENDER grouping to
+	get the result
+	- E.g. SELECT SUM(salary) FROM employee_payroll WHERE gender = 'F' GROUP BY
+
+	select sum(salary) from EmployeePayroll where gender='F' group by gender;
++-------------+
+| sum(salary) |
++-------------+
+|      130000 |
++-------------+
+	select avg(salary) from EmployeePayroll where gender='M' group by gender;
++-------------+
+| avg(salary) |
++-------------+
+|  51666.6667 |
++-------------+
+
+		Section 2:-ER Diagram
+
+UC-8-  alter table EmployeePayroll add mobileNo int;
+	alter table EmployeePayroll add address varchar(255);
+	alter table EmployeePayroll add department varchar(255) not null;
+	update EmployeePayroll set address = "pune";
+
+ MySQL  lo select * from EmployeePayroll;
++------------+--------------+--------+------------+--------+----------+---------+------------+
+| EmployeeId | EmployeeName | salary | startDate  | gender | mobileNo | address | department |
++------------+--------------+--------+------------+--------+----------+---------+------------+
+|        101 | kiran        |  40000 | 2021-09-05 | F      |     NULL | pune    | NULL       |
+|        102 | Akshay       |  50000 | 2021-08-18 | M      |     NULL | pune    | NULL       |
+|        103 | Akash        |  60000 | 2021-12-05 | M      |     NULL | pune    | NULL       |
+|        104 | Aniket       |  45000 | 2021-09-05 | M      |     NULL | pune    | NULL       |
+|        105 | Divya        |  90000 | 2021-05-05 | F      |     NULL | pune    | NULL       |
++------------+--------------+--------+------------+--------+----------+---------+------------+
+select * from EmployeePayroll;
++------------+--------------+--------+------------+--------+----------+---------+------------+
+| EmployeeId | EmployeeName | salary | startDate  | gender | mobileNo | address | department |
++------------+--------------+--------+------------+--------+----------+---------+------------+
+|        101 | kiran        |  40000 | 2021-09-05 | F      |    99213 | pune    | A          |
+|        102 | Akshay       |  50000 | 2021-08-18 | M      |  9827262 | pune    | C          |
+|        103 | Akash        |  60000 | 2021-12-05 | M      |   892773 | pune    | D          |
+|        104 | Aniket       |  45000 | 2021-09-05 | M      |   892773 | pune    | B          |
+|        105 | Divya        |  90000 | 2021-05-05 | F      |   478474 | pune    | A          |
++------------+--------------+--------+------------+--------+----------+---------+------------+
+
+UC-9-Ability to extend employee_payroll table to have Basic Pay,Deductions, Taxable Pay,Income Tax, Net Pay
+sol:-
+select * from EmployeePayroll;
++------------+--------------+--------+------------+--------+----------+---------+------------+----------+------------+-----------+--------+
+| EmployeeId | EmployeeName | salary | startDate  | gender | mobileNo | address | department | basicPay | diductions | incomeTax | netPay |
++------------+--------------+--------+------------+--------+----------+---------+------------+----------+------------+-----------+--------+
+|        101 | kiran        |  40000 | 2021-09-05 | F      |    99213 | pune    | A          |    20000 |      25000 |         2 |  40000 |
+|        102 | Akshay       |  50000 | 2021-08-18 | M      |  9827262 | pune    | C          |    30000 |      25000 |         2 |  30000 |
+|        103 | Akash        |  60000 | 2021-12-05 | M      |   892773 | pune    | D          |    20000 |      25000 |         2 |  30000 |
+|        104 | Aniket       |  45000 | 2021-09-05 | M      |   892773 | pune    | B          |    25000 |      25000 |         2 | 350000 |
+|        105 | Divya        |  90000 | 2021-05-05 | F      |   478474 | pune    | A          |    25000 |      25000 |         2 |  40000 |
++------------+--------------+--------+------------+--------+----------+---------+------------+----------+------------+-----------+--------+
